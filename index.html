@@ -1,0 +1,92 @@
+<head>
+  <title>vocab-drill</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <script src="js/jquery-1.11.1.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+
+  <script>
+
+    var wordlist = [];
+    var correct = 0;
+    var wrong = 0;
+    var show = false;
+    $.getJSON('wordlist.json', function (data) {
+      
+      for (var key in data) {
+        wordlist.push({word: data[key].word, definition: data[key].definition});
+      }
+      console.log(wordlist.length);
+      newWord();
+    });
+    //console.log(wordlist.length);
+    var newWord = function() {
+      var id = Math.floor(Math.random()*wordlist.length);
+      document.getElementById("word").innerHTML = wordlist[id].word;
+      document.getElementById("box-definition").innerHTML = wordlist[id].definition;
+    }
+
+    var know = function() {
+      correct = correct+1;
+      newWord();
+      document.getElementById("subtext").innerHTML = "You recognised "+correct+" words and missed "+wrong+"  words."
+    }
+
+    var dontknow = function() {
+      wrong = wrong+1;
+      newWord();
+      document.getElementById("subtext").innerHTML = "You recognised "+correct+" words and missed "+wrong+"  words."
+    }
+
+    var showtext = function() {
+      
+      if (show) { //if box is currently visible
+        show = false;
+        document.getElementById("box-definition").classList.remove('visible');
+        document.getElementById("box-definition").classList.add('hidden');
+      } else {
+        show = true;
+        document.getElementById("box-definition").classList.remove('hidden');
+        document.getElementById("box-definition").classList.add('visible');
+      }
+    }
+
+    var createCookie = function(name, correct, wrong, days) {
+      var expires;
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000))
+        expires = "; expires="+date.toGMTString()+";";
+      } else {
+        expires = "";
+      }
+      document.cookie = "username="+name+expires 
+    }
+    
+
+  </script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="text-center">
+  		<h1 id="word">aaa</h1><br>
+  		
+      <p id="subtext">You recognised 0 words and missed 0 words.</p></br>	
+      <button type="button" class="btn btn-warning" id="btn-show" onclick="showtext()">Show Definition</button>
+      <button type="button" class="btn btn-success" id="btn-correct" onclick="know()">I Know This</button>
+      <button type="button" class="btn btn-danger" id="btn-wrong" onclick="dontknow()">I Don't</button>
+        
+        
+        </br></br><pre id="box-definition" class="hidden">Definition</pre>
+  	</div>
+  </div>
+
+
+
+</body>
+
+
+<template name="hello">
+  			
+</template>
+
